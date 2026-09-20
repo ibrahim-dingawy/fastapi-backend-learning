@@ -5,7 +5,7 @@
             return True
         seen.add(num)
     return False"""
-
+from app.models.video import Video
 
 """def two_sum(nums, target):
     seen = {}
@@ -354,13 +354,170 @@ def count_pairs(nums, target):
     return count"""
 
 
-"""
-nums = [1, 2, 3, 4, 5]
-target = 6
-def count_pairs(nums, target):
+
+
+"""def count_pairs(nums, target):
     seen = set()
     count = 0
 
     for num in nums:
-        needed = target - num"""
+        needed = target - num
+        if needed in seen:
+            count += 1
+            seen.add(num)"""
 
+
+"""videos = [
+    {"id": 1, "status": "ready"},
+    {"id": 2, "status": "processing"},
+    {"id": 3, "status": "ready"},
+    {"id": 4, "status": "failed"},
+    {"id": 5, "status": "ready"},
+]
+
+
+def most_frequent_status(videos):
+    counts = {}
+
+    for video in videos:
+        status = video["status"]
+
+        if status in counts:
+            counts[status] += 1
+        else:
+            counts[status] = 1
+
+    most_status = None
+    max_count = 0
+
+    for status, count in counts.items():
+        if count > max_count:
+            max_count = count
+            most_status = status
+    return most_status
+"""
+
+
+videos = [
+        {"id": 1, "title": "Python Basics", "status": "ready"},
+        {"id": 2, "title": "FastAPI Tutorial", "status": "processing"},
+        {"id": 3, "title": "SQLAlchemy Basics", "status": "ready"},
+    ]
+
+def update_video_title(videos, video_id, new_title):
+    for video in videos:
+        if video["id"] == video_id:
+            video["title"] = new_title
+            return video
+    return None
+
+def update_video_status(videos, video_id, new_status):
+    for video in videos:
+        if video["id"] == video_id and new_status in ["processing", "ready", "failed"]:
+            video["status"] = new_status
+            return video
+    return None
+
+
+
+def create_video(videos, title, status):
+    if title is None:
+        return "Title is required"
+    elif status not in ["processing", "ready", "failed"]:
+        return "Invalid status"
+    else:
+        new_id = videos[-1]["id"] + 1
+        new_video = {"id": new_id, "title": title, "status": status}
+        videos.append(new_video)
+        return new_video
+
+
+def get_next_video_id(videos):
+    if not videos:
+        return 1
+    new_id = videos[-1]["id"] + 1
+    return new_id
+
+
+def can_delete_video(video):
+    for video in videos:
+        if video["status"] == "processing":
+            return False
+    return True
+
+def delete_video(videos, video_id):
+    for video in videos:
+        if video["id"] != video_id:
+            return None
+        if not can_delete_video(videos):
+            return "Cannot delete processing video"
+        videos.pop(video)
+    return True
+
+
+
+
+
+
+"""        if video["id"] == video_id and can_delete_video(videos):
+            videos.pop(video)
+            return True
+"""
+
+
+
+
+"""from sqlalchemy import select
+
+
+
+
+def filter_videos(db, status=None, title=None):
+    stmt = select(Video)
+    if status is not None:
+        stmt = stmt.where(Video.status == status)
+    if title is not None:
+        stmt = stmt.where(Video.title == title)
+    vids = db.scalars(stmt).all()
+    return vids"""
+
+
+from sqlalchemy import select
+"""
+def update_video_title(db, video_id, new_title):
+    video = db.get(Video, video_id)
+    if not video:
+        return None
+    video.title = new_title
+    db.commit()
+    db.refresh(video)
+    return video
+"""
+
+"""def delete_video(db, video_id):
+    video = db.get(Video, video_id)
+    if not video:
+        return None
+    db.delete(video)
+    db.commit()
+    db.refresh(video)
+    return True
+
+
+"""
+
+def create_video(db, title, status):
+    video = Video(
+        title=title,
+        status=status
+    )
+
+    if not title:
+        return "title is required"
+    if status not in ["processing", "ready", "failed"]:
+        return "invalid status"
+
+    db.add(video)
+    db.commit()
+    db.refresh(video)
+    return video
