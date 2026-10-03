@@ -82,7 +82,7 @@ app.include_router(videos.router)
 @app.get("/")
 def home():
     return {
-        "message": "Hello from FastAPI"
+        "message": "Hello from FastAPI v2"
     }
 
 
