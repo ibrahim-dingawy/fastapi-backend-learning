@@ -15,7 +15,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   backend:
-    build: .
+    image: ghcr.io/ibrahim-dingawy/fastapi-backend:latest
     container_name: fastapi-backend
 
     ports:
